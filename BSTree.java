@@ -1,5 +1,9 @@
 package arbolesPractica01;
 
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
 public class BSTree<E extends Comparable<E>> implements LinkBST<E> {
     class Node<E> {
         protected E data;
@@ -168,6 +172,55 @@ public class BSTree<E extends Comparable<E>> implements LinkBST<E> {
     	}return current;
     }
     
+    //Ejercicio 01
+    public int countsNodes() throws ItemNoFound{
+    	if(isEmpty())
+    		throw new ItemNoFound();
+    	return countsNodes(root);
+    	
+    }
+    
+    private int countsNodes(Node<E> nod) {
+    	if(nod==null)
+    		return 0;
+    	
+    	if (nod.left == null && nod.right == null) {
+            return 0;
+        }
+    	int cont = 1;
+    	cont+=countsNodes(nod.left);
+    	cont+=countsNodes(nod.right);
+    	return cont;
+    }
+    
+    public int searchHeight(E x) throws ItemNoFound{
+    	if (isEmpty())
+            throw new ItemNoFound();
+    	Node<E> current = root;
+    	while(current != null) {
+    		if(x.compareTo(current.data)>0) {
+    			current = current.right;
+    		}else if(x.compareTo(current.data)<0) {
+    			current = current.left;
+    		}else {
+    			return height(current);
+    		}
+    	}throw new ItemNoFound();
+    }
+       
+    private int height(Node n)throws ItemNoFound {
+    	int de=0;
+    	int iz=0;
+   	 	if(n.left==null && n.right==null) {
+   	 		return 0;
+   	 	}else if(n.left==null) {
+   	 		de+=height(n.right);
+   	 	}else {
+   	 		iz+=height(n.left);
+   	 	}
+   	 	return 1+Math.max(de,iz);
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -182,5 +235,105 @@ public class BSTree<E extends Comparable<E>> implements LinkBST<E> {
             inOrderTraversal(node.right, sb);
         }
     }
+    
+    //Ejercicio 1
+    public int countNodes(int level) throws ItemNoFound{
+        if (isEmpty()) {
+            throw new ItemNoFound();
+        }
+        if (level < 0) {
+            return 0; // Nivel inválido
+        }
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+        int currentLevel = 0;
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            if (currentLevel == level) {
+                return size; // El número de nodos en el nivel actual
+            }
+            // Procesar todos los nodos en el nivel actual
+            for (int i = 0; i < size; i++) {
+                Node<E> node = queue.poll();
+                // Agregar los hijos del nodo a la cola
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            currentLevel++;
+        }
+        return 0;
+    }
+    
+    //Ejercicio 2.1
+    public int areaBST() {
+    	int treeHeight = 0;
+        int leafCount = countLeaves(root);
+        try {
+        	treeHeight = height(root);
+        }catch (ItemNoFound e) {
+        	System.out.println(e.getMessage());
+        }
+        
+        return leafCount * treeHeight;
+    }
+    
+    private int countLeaves(Node<E> node) {
+        if (node == null) {
+            return 0;
+        }
+        if (node.left == null && node.right == null) {
+            return 1;
+        }
+        return countLeaves(node.left) + countLeaves(node.right);
+    }
+    
+    //Ejercicio 2.2
+    public static <E extends Comparable<E>> boolean sameArea(BSTree<E> tree1, BSTree<E> tree2) {
+        return tree1.areaBST() == tree2.areaBST();
+    }
+    
+    //Ejercicio 3 
+    public void iterativePreOrden() {
+
+            if (isEmpty()) {
+                System.out.println("El árbol está vacío");
+                return;
+            }
+
+            Stack<Node<E>> stack = new Stack<>();
+            stack.push(root);
+
+            while (!stack.isEmpty()) {
+                Node<E> current = stack.pop();
+                System.out.print(current.data + " ");
+                if (current.right != null) {
+                    stack.push(current.right);
+                }
+                if (current.left != null) {
+                    stack.push(current.left);
+                }
+            }
+        }
+
+        //Ejercicio 4
+
+        public int countNodes() {
+            return countNodes(root);
+        }
+
+        private int countNodes(Node<E> node) {
+            if (node == null) {
+                return 0;
+            } else {
+                return 1 + countNodes(node.left) + countNodes(node.right);
+
+            }
+        }
+        
     
 }

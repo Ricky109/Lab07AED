@@ -5,4 +5,5 @@ public interface LinkBST<E> {
 	public void remove(E x)throws ItemNoFound;
 	public E search(E x) throws ItemNoFound;
 	public boolean isEmpty();
+	
 }
