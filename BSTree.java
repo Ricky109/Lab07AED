@@ -5,9 +5,9 @@ import java.util.Queue;
 import java.util.Stack;
 
 public class BSTree<E extends Comparable<E>> implements LinkBST<E> {
-    class Node<E> {
-        protected E data;
-        protected Node left, right;
+    protected class Node<E> {
+    	public E data;
+    	public Node<E> left, right;
         
         public Node(E data) {
             this(data, null, null);
@@ -20,7 +20,7 @@ public class BSTree<E extends Comparable<E>> implements LinkBST<E> {
         }
     }
     
-    private Node<E> root;
+    protected Node<E> root;
     
     public BSTree() {
         this.root = null;
@@ -163,7 +163,7 @@ public class BSTree<E extends Comparable<E>> implements LinkBST<E> {
     	return prov.data;
     }
     
-    private Node<E> minRemove(Node<E> n)throws ItemNoFound{
+    public Node<E> minRemove(Node<E> n)throws ItemNoFound{
     	if(isEmpty())
     		throw new ItemNoFound();
     	Node<E> current = n;
